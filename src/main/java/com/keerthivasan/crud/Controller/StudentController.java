@@ -1,49 +1,51 @@
 package com.keerthivasan.crud.Controller;
 
-import com.keerthivasan.crud.Model.Student;
+import com.keerthivasan.crud.Dto.StudentDto;
 import com.keerthivasan.crud.Service.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/students")
-@CrossOrigin(origins = "*")  // Allow frontend apps
+@RequestMapping("/api/students")
 public class StudentController {
 
     @Autowired
     private StudentService studentService;
 
-    // Create
-    @PostMapping
-    public Student createStudent(@RequestBody Student student) {
-        return studentService.saveStudent(student);
-    }
-
-    // Read All
     @GetMapping
-    public List<Student> getAllStudents() {
+    public List<StudentDto> getAllStudents() {
         return studentService.getAllStudents();
     }
 
-    // Read One
     @GetMapping("/{id}")
-    public Student getStudentById(@PathVariable Long id) {
+    public ResponseEntity<StudentDto> getStudentById(@PathVariable Long id) {
         return studentService.getStudentById(id)
-                .orElseThrow(() -> new RuntimeException("Student not found"));
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
     }
 
-    // Update
+    @PostMapping
+    public ResponseEntity<StudentDto> createStudent(@RequestBody StudentDto dto) {
+        StudentDto saved = studentService.createStudent(dto);
+        return ResponseEntity.ok(saved);
+    }
+
     @PutMapping("/{id}")
-    public Student updateStudent(@PathVariable Long id, @RequestBody Student student) {
-        return studentService.updateStudent(id, student);
+    public ResponseEntity<StudentDto> updateStudent(@PathVariable Long id, @RequestBody StudentDto dto) {
+        try {
+            StudentDto updated = studentService.updateStudent(id, dto);
+            return ResponseEntity.ok(updated);
+        } catch (RuntimeException e) {
+            return ResponseEntity.notFound().build();
+        }
     }
 
-    // Delete
     @DeleteMapping("/{id}")
-    public String deleteStudent(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteStudent(@PathVariable Long id) {
         studentService.deleteStudent(id);
-        return "Deleted Successfully!";
+        return ResponseEntity.noContent().build();
     }
 }

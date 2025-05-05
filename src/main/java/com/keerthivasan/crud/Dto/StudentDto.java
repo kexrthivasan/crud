@@ -1,35 +1,18 @@
-package com.keerthivasan.crud.Model;
+package com.keerthivasan.crud.Dto;
 
-import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
-@Entity
-@Getter
-@Setter
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Student {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+public class StudentDto {
     private Long id;
-
     private String name;
-
     private String email;
-
     private Integer age;
-
     private String course;
-
     private String address;
-
     private String phoneNumber;
-
-
-
 }
-
