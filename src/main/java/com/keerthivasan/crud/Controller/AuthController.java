@@ -2,6 +2,7 @@ package com.keerthivasan.crud.Controller;
 
 import com.keerthivasan.crud.Dto.AuthenticationRequest;
 import com.keerthivasan.crud.Dto.AuthenticationResponse;
+import com.keerthivasan.crud.Dto.RegisterRequest;
 import com.keerthivasan.crud.Model.Role;
 import com.keerthivasan.crud.Model.User;
 import com.keerthivasan.crud.Repository.UserRepository;
@@ -28,7 +29,7 @@ public class AuthController {
     private final PasswordEncoder passwordEncoder;
 
     @PostMapping("/register")
-    public ResponseEntity<String> register(@RequestBody AuthenticationRequest request) {
+    public ResponseEntity<String> register(@RequestBody RegisterRequest request) {
         if (userRepository.findByUsername(request.getUsername()).isPresent()) {
             return ResponseEntity.badRequest().body("Username already exists");
         }
